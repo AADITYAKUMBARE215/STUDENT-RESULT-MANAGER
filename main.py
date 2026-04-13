@@ -16,9 +16,21 @@ def save_data(data): # saves data after running code
     with open(FILE, "w") as f:
         json.dump(data, f)
 
+def calculate_grade(marks): # grade allocation function
+    if marks >= 90:
+        return "A"
+    elif marks >= 75:
+        return "B"
+    elif marks >= 50:
+        return "C"
+    elif marks >= 35:
+        return "D"
+    else :
+        return "Fail"
+
 student = load_data() # loading before code
 
-print("-------- STUDENT RESULT MANAGER --------")
+print("-------- STUDENT RESULT MANAGER --------") # menu
 while True:
     print("----MENU----")
     print("1. Add student")
@@ -33,7 +45,9 @@ while True:
         id = input("Enter student id: ")
         name = input("Enter student name: ")
         marks = int(input("Enter marks: "))
-        student[id] = [name, marks] 
+        grade = calculate_grade(marks)
+        student[id] = [name, marks, grade] 
+        save_data(student)
         print("Student successfully added !")
         print("----------------------------------------\n")
 
@@ -42,22 +56,26 @@ while True:
             print("No student found !")
             print("----------------------------------------\n")
         else:
-            print(f"{'ID':<10}{'NAME':<20}{'MARKS':<10}")
-            for id, [name, marks] in student.items():
-                print(f"{id:<10}{name:<20}{marks:<10}")
+            print(f"{'ID':<10}{'NAME':<20}{'MARKS':<10}{'GRADE':<10}")
+            for id, [name, marks, grade] in student.items():
+                print(f"{id:<10}{name:<20}{marks:<10}{grade:<10}")
             print("----------------------------------------\n")
 
     elif choice == "3":
         id = input("Enter student id: ")
         if id in student:
-            name, marks = student[id]
-            print ("marks : ",marks)
-            if marks >= 40:
-                print(name," passed !")
-                print("----------------------------------------\n")
+            name, marks, grade = student[id]
+            print(f"Name  : {name}")
+            print(f"Marks : {marks}")
+            print(f"Grade : {grade}")
+
+            if grade != "Fail":
+                print(name, "passed !")
             else:
-                print(name," failed !")
-                print("----------------------------------------\n")
+                print(name, "failed !")
+
+            print("----------------------------------------\n")
+            
         else:
             print("Student not found !")
             print("----------------------------------------\n")
